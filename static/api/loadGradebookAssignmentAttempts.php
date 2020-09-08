@@ -19,29 +19,27 @@ if (!isset($_GET["assignmentId"])) {
     $assignmentId = mysqli_real_escape_string($conn,$_REQUEST["assignmentId"]);
 
     // check to make sure assignment exists
-    $sql = "
-        SELECT assignmentId
-        FROM assignment
-        WHERE assignment.assignmentId = '$assignmentId'
+    $sql = "SELECT assignmentId
+            FROM assignment
+            WHERE assignment.assignmentId = '$assignmentId'
     ";
 
     $result = $conn->query($sql);
     if ($result->num_rows == 1) {
         // do the actual query
-        $sql = "
-        SELECT 
-		ua.userId as userId,
-		ua.credit as assignmentCredit,
-		ua.creditOverride as assignmentCreditOverride,
-		uaa.attemptNumber as attemptNumber,
-		uaa.credit as attemptCredit,
-		uaa.creditOverride AS attemptCreditOverride
-        FROM user_assignment_attempt AS uaa
-        LEFT JOIN user_assignment AS ua
-        ON ua.assignmentId = uaa.assignmentId 
-        AND ua.userId = uaa.userId
-        WHERE uaa.assignmentId = '$assignmentId'
-        ORDER BY uaa.attemptNumber
+        $sql = "SELECT
+                    ua.userId as userId,
+                    ua.credit as assignmentCredit,
+                    ua.creditOverride as assignmentCreditOverride,
+                    uaa.attemptNumber as attemptNumber,
+                    uaa.credit as attemptCredit,
+                    uaa.creditOverride AS attemptCreditOverride
+                FROM user_assignment_attempt AS uaa
+                LEFT JOIN user_assignment AS ua
+                ON ua.assignmentId = uaa.assignmentId 
+                AND ua.userId = uaa.userId
+                WHERE uaa.assignmentId = '$assignmentId'
+                ORDER BY uaa.attemptNumber
         ";
     
         $result = $conn->query($sql);

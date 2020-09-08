@@ -13,16 +13,14 @@ if (!isset($_GET["courseId"])) {
 } else {
     $courseId = mysqli_real_escape_string($conn,$_REQUEST["courseId"]);
 
-    $sql = "
-        SELECT a.assignmentId, a.title
-        FROM assignment AS a
-        WHERE a.courseId = '$courseId'
-        ORDER BY a.dueDate
+    $sql = "SELECT a.assignmentId, a.title
+            FROM assignment AS a
+            WHERE a.courseId = '$courseId'
+            ORDER BY a.dueDate
     ";
 
     $result = $conn->query($sql); 
     $response_arr = array();
-
 
     if ($result->num_rows > 0){
         while ($row = $result->fetch_assoc()) {
@@ -41,7 +39,7 @@ if (!isset($_GET["courseId"])) {
         echo json_encode($response_arr);
     } else {
         http_response_code(404);
-        echo "Database Retrieval Error: No such course: '$courseId'";
+        echo "Database Retrieval Error: No such course: '$courseId'"; // not necessarily true?
     }
 }
 

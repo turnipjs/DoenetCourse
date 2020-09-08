@@ -15,29 +15,28 @@ $courseInfo = array();
 $courseId_arr = array();
 $courseIndex = 0;
 //Add courses where user is an instructor
-$sql="
-SELECT 
-c.courseId AS courseId,
-c.shortName AS courseCode,
-c.longName AS longName,
-c.term as term,
-c.description AS description,
-c.overview_branchId as overviewId,
-c.syllabus_branchId as syllabusId,
-c.overviewEnabled as overviewEnabled,
-c.syllabusEnabled as syllabusEnabled,
-c.gradeEnabled as gradeEnabled,
-c.assignmentEnabled as assignmentEnabled,
-c.department as department,
-c.section as section,
-c.color AS color,
-c.term AS term,
-c.image AS image
-FROM course AS c
-LEFT JOIN course_instructor AS ci
-ON c.courseId = ci.courseId
-WHERE ci.userId = '$userId'
-ORDER BY c.shortName
+$sql = "SELECT 
+            c.courseId AS courseId,
+            c.shortName AS courseCode,
+            c.longName AS longName,
+            c.term as term,
+            c.description AS description,
+            c.overview_branchId as overviewId,
+            c.syllabus_branchId as syllabusId,
+            c.overviewEnabled as overviewEnabled,
+            c.syllabusEnabled as syllabusEnabled,
+            c.gradeEnabled as gradeEnabled,
+            c.assignmentEnabled as assignmentEnabled,
+            c.department as department,
+            c.section as section,
+            c.color AS color,
+            c.term AS term,
+            c.image AS image
+        FROM course AS c
+        LEFT JOIN course_instructor AS ci
+        ON c.courseId = ci.courseId
+        WHERE ci.userId = '$userId'
+        ORDER BY c.shortName
 ";
 
 $result = $conn->query($sql); 
@@ -75,28 +74,27 @@ if ($result->num_rows > 0){
 }
 
 //Add courses where user is enrolled
-$sql="
-SELECT 
-c.courseId As courseId,
-c.shortName AS courseCode,
-c.longName AS longName,
-c.term as term,
-c.description AS description,
-c.overview_branchId as overviewId,
-c.syllabus_branchId as syllabusId,
-c.overviewEnabled as overviewEnabled,
-c.syllabusEnabled as syllabusEnabled,
-c.gradeEnabled as gradeEnabled,
-c.assignmentEnabled as assignmentEnabled,
-c.department as department,
-c.section as section,
-c.color AS color,
-c.image AS image
-FROM course AS c
-LEFT JOIN course_enrollment AS ce
-ON c.courseId = ce.courseId
-WHERE ce.userId = '$userId'
-ORDER BY c.shortName
+$sql = "SELECT 
+            c.courseId As courseId,
+            c.shortName AS courseCode,
+            c.longName AS longName,
+            c.term as term,
+            c.description AS description,
+            c.overview_branchId as overviewId,
+            c.syllabus_branchId as syllabusId,
+            c.overviewEnabled as overviewEnabled,
+            c.syllabusEnabled as syllabusEnabled,
+            c.gradeEnabled as gradeEnabled,
+            c.assignmentEnabled as assignmentEnabled,
+            c.department as department,
+            c.section as section,
+            c.color AS color,
+            c.image AS image
+        FROM course AS c
+        LEFT JOIN course_enrollment AS ce
+        ON c.courseId = ce.courseId
+        WHERE ce.userId = '$userId'
+        ORDER BY c.shortName
 ";
 
 $result = $conn->query($sql); 
@@ -104,7 +102,6 @@ $result = $conn->query($sql);
 
     
 if ($result->num_rows > 0){
-  
   while($row = $result->fetch_assoc()){ 
     $course = array(
           "courseId" => $row["courseId"],
@@ -134,14 +131,12 @@ if ($result->num_rows > 0){
   }
 }
 
-//echo json_encode($courseInfo);
 
 $sql = "SELECT udm.courseId, udm.color, udm.position, udm.image
-         FROM user_dashboard_modification as udm
-         WHERE udm.userId = '$userId'
+        FROM user_dashboard_modification as udm
+        WHERE udm.userId = '$userId'
 ";
 
-//echo json_encode($courseInfo);
 
 $result = $conn->query($sql);
 while ($row = $result->fetch_assoc()) {
@@ -157,8 +152,8 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $response_arr = array(
- "success" => TRUE,
- "courseInfo" => $courseInfo
+    "success" => TRUE,
+    "courseInfo" => $courseInfo
 );
     
 // set response code - 200 OK

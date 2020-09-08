@@ -14,15 +14,14 @@ $jwtArray = include "jwtArray.php";
 $userId = $jwtArray['userId'];
 
 
-$sql = "
-SELECT id
-FROM repo_access
-WHERE userId = '$userId' AND repoId = '$repoId'
+$sql = "SELECT id
+        FROM repo_access
+        WHERE userId = '$userId' AND repoId = '$repoId'
 ";
 
 $result = $conn->query($sql); 
 $permisionToRemove = $result->num_rows;
-$userId = $result->userId;
+$userId = $result->userId; // ?
 $row = $result->fetch_assoc();
 $userId = $row["userId"];
 
@@ -31,49 +30,47 @@ $response_arr = array(
 );
 
 if ($permisionToRemove > 0 ){
-//  User has permission to remove the user, so remove them
-  $sql = "
-  DELETE FROM repo_access
-  WHERE repoId='$repoId' AND email='$email'
-  ";
-  $result = $conn->query($sql); 
+    //  User has permission to remove the user, so remove them
+    $sql = "DELETE FROM repo_access
+            WHERE repoId='$repoId' AND email='$email'
+    ";
+    $result = $conn->query($sql); 
 
-  //Collect users who can access repos
-    $sql = "
-    SELECT 
-  u.firstName AS firstName,
-  u.lastName AS lastName,
-  u.userId AS userId,
-  u.email AS email,
-  ra.owner AS owner
-  FROM repo_access AS ra
-  LEFT JOIN user AS u
-  ON u.email = ra.email
-  WHERE ra.repoId = '$repoId'
-  ";
-  $result = $conn->query($sql); 
-  $users = array();
-  while($row = $result->fetch_assoc()){ 
-    $user_info = array(
-      "firstName"=>$row["firstName"],
-      "lastName"=>$row["lastName"],
-      "username"=>$row["username"],
-      "email"=>$row["email"],
-      "owner"=>$row["owner"]
+    //Collect users who can access repos
+    $sql = "SELECT 
+                u.firstName AS firstName,
+                u.lastName AS lastName,
+                u.userId AS userId,
+                u.email AS email,
+                ra.owner AS owner
+            FROM repo_access AS ra
+
+            LEFT JOIN user AS u
+            ON u.email = ra.email
+            WHERE ra.repoId = '$repoId'
+    ";
+    $result = $conn->query($sql); 
+    $users = array();
+    while($row = $result->fetch_assoc()){ 
+        $user_info = array(
+            "firstName"=>$row["firstName"],
+            "lastName"=>$row["lastName"],
+            "username"=>$row["username"],
+            "email"=>$row["email"],
+            "owner"=>$row["owner"]
+        );
+        array_push($users,$user_info);
+    }
+    $response_arr = array(
+        "success"=>"1",
+        "users"=>$users
     );
-    array_push($users,$user_info);
-  }
-  $response_arr = array(
-    "success"=>"1",
-    "users"=>$users
-  );
 } 
 
 
-  http_response_code(200);
-  echo json_encode($response_arr);
+http_response_code(200);
+echo json_encode($response_arr);
 
 
 $conn->close();
 ?>
-

@@ -38,17 +38,17 @@ if ($result->num_rows > 0){
 
     $result = $conn->query($sql);
     $used_deviceNames = array();
-    while($row = $result->fetch_assoc()){
-    array_push($used_deviceNames,$row['deviceName']);
+    while ($row = $result->fetch_assoc()) {
+        array_push($used_deviceNames,$row['deviceName']);
     }
     $deviceNames = array_values(array_diff($deviceNames,$used_deviceNames));
-    if (count($deviceNames) < 1){
-    //Ran out of device names
-    $deviceName = include 'randomId.php';
-    }else{
-    //Pick from what is left
-    $randomNumber = rand(0,(count($deviceNames) - 1));
-    $deviceName = $deviceNames[$randomNumber];
+    if (count($deviceNames) < 1) {
+        //Ran out of device names
+        $deviceName = include 'randomId.php';
+    } else {
+        //Pick from what is left
+        $randomNumber = rand(0,(count($deviceNames) - 1));
+        $deviceName = $deviceNames[$randomNumber];
     }
 
 
@@ -71,7 +71,7 @@ mail($emailaddress,"Doenet Signin","Your code is: $signInCode on device $deviceN
 $response_arr = array(
     "success" => 1,
     "deviceName" => $deviceName,
-    );
+);
 
 // set response code - 200 OK
 http_response_code(200);

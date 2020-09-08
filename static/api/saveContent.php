@@ -88,13 +88,13 @@ if ($userId == ""){
     
         if ($HAVE_ACCESS) {
             //Update content draft
-            $sql = "
-            UPDATE content
-            SET title='$title',
-            doenetML='$doenetML',
-            contentId='$contentId',
-            timestamp=NOW()
-            WHERE branchId='$branchId' AND draft=1 
+            $sql = "UPDATE content
+                    SET
+                        title='$title',
+                        doenetML='$doenetML',
+                        contentId='$contentId',
+                    timestamp=NOW()
+                    WHERE branchId='$branchId' AND draft=1
             ";
             $result = $conn->query($sql); 
     
@@ -108,13 +108,13 @@ if ($userId == ""){
                 ";
                 $result = $conn->query($sql); 
                 //Update doenetML, title, latestContentId cell and updateDate for branchId
-                $sql = "
-                UPDATE content_branch
-                SET title='$title',
-                doenetML='$doenetML',
-                updateDate=NOW(),
-                latestContentId='$contentId'
-                WHERE branchId='$branchId' 
+                $sql = "UPDATE content_branch
+                        SET
+                            title='$title',
+                            doenetML='$doenetML',
+                            updateDate=NOW(),
+                            latestContentId='$contentId'
+                        WHERE branchId='$branchId' 
                 ";
                 $result = $conn->query($sql); 
             }

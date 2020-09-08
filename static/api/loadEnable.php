@@ -15,10 +15,14 @@ $assignment =  mysqli_real_escape_string($conn,$_GET["assignment"]);
 $overview_branchId;
 $syllabus_branchId;
 
-$sql = "
-  SELECT overviewEnabled, gradeEnabled,syllabusEnabled,assignmentEnabled,overview_branchId,syllabus_branchId
-  from course
-  WHERE courseId = '$courseId'
+$sql = "SELECT overviewEnabled,
+            gradeEnabled,
+            syllabusEnabled,
+            assignmentEnabled,
+            overview_branchId,
+            syllabus_branchId
+        FROM course
+        WHERE courseId = '$courseId'
 ";
 $result = $conn->query($sql);
 if ($result->num_rows > 0){
@@ -32,18 +36,19 @@ if ($result->num_rows > 0){
    }
 }
 $response_arr = array(
-  "overview" => $overview,
-  "syllabus"=>$syllabus,
-  "grade"=>$grade,
-  "assignment"=>$assignment,
-  "overview_branchId"=>$overview_branchId,
-  "syllabus_branchId" =>$syllabus_branchId
-  );
-  http_response_code(200);
+    "overview" => $overview,
+    "syllabus"=>$syllabus,
+    "grade"=>$grade,
+    "assignment"=>$assignment,
+    "overview_branchId"=>$overview_branchId,
+    "syllabus_branchId" =>$syllabus_branchId
+);
 
-  // make it json format
-  echo json_encode($response_arr);
- 
+http_response_code(200);
+
+// make it json format
+echo json_encode($response_arr);
+
  $conn->close();
 
-?> 
+?>

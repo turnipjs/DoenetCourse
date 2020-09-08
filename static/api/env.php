@@ -7,7 +7,10 @@ header('Content-Type: application/json');
 
 include "db_connection.php";
 
-$sql = "SELECT username,accessAllowed,adminAccessAllowed FROM user WHERE username='$remoteuser' AND accessAllowed='1';";
+$sql = "SELECT username, accessAllowed, adminAccessAllowed
+        FROM user
+        WHERE username='$remoteuser'
+            AND accessAllowed='1';";
 
 $result = $conn->query($sql); 
 $row = $result->fetch_assoc();
@@ -20,11 +23,11 @@ $response_arr = array(
     "adminAccess"=>$row["adminAccessAllowed"]
 );
 
- // set response code - 200 OK
- http_response_code(200);
+// set response code - 200 OK
+http_response_code(200);
 
- // make it json format
- echo json_encode($response_arr);
+// make it json format
+echo json_encode($response_arr);
 $conn->close();
 
 ?>

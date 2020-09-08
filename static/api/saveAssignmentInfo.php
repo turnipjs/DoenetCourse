@@ -25,39 +25,41 @@ $showHints =  mysqli_real_escape_string($conn,$_POST["showHints"]);
 $showCorrectness =  mysqli_real_escape_string($conn,$_POST["showCorrectness"]);
 $proctorMakesAvailable =  mysqli_real_escape_string($conn,$_POST["proctorMakesAvailable"]);
 
-echo "PHP @!!!!!!\n";
+echo "PHP @!!!1!!1!\n";
 
 
 $dbIndividualize = 0;
 if ($individualize){
-  $dbIndividualize = 1;
+    $dbIndividualize = 1;
 }
 
 if (strcmp($dueDate,'null') != 0){
-$dueDate = "'".$dueDate."'";
+    $dueDate = "'".$dueDate."'";
 }
 if (strcmp($assignedDate,'null') != 0){
-$assignedDate = "'".$assignedDate."'";
+    $assignedDate = "'".$assignedDate."'";
 }
 
 $sql = "UPDATE assignment 
-SET assignmentName = '$assignmentName',
-dueDate = $dueDate,
-assignedDate = $assignedDate,
-gradeCategory = '$gradeCategory',
-timeLimit='$timeLimit',
-totalPointsOrPercent = '$totalPointsOrPercent',
-numberOfAttemptsAllowed = '$numberOfAttemptsAllowed',
+        SET
+            assignmentName = '$assignmentName',
+            dueDate = $dueDate,
+            assignedDate = $assignedDate,
+            gradeCategory = '$gradeCategory',
+            timeLimit='$timeLimit',
+            totalPointsOrPercent = '$totalPointsOrPercent',
+            numberOfAttemptsAllowed = '$numberOfAttemptsAllowed',
 
-individualize = '$dbIndividualize',
-multipleAttempts = '$multipleAttempts',
-showSolution = '$showSolution',
-showFeedback = '$showFeedback',
-showHints = '$showHints',
-showCorrectness = '$showCorrectness',
-proctorMakesAvailable = '$proctorMakesAvailable'
+            individualize = '$dbIndividualize',
+            multipleAttempts = '$multipleAttempts',
+            showSolution = '$showSolution',
+            showFeedback = '$showFeedback',
+            showHints = '$showHints',
+            showCorrectness = '$showCorrectness',
+            proctorMakesAvailable = '$proctorMakesAvailable'
 
-WHERE assignmentId = '$assignmentId'";
+        WHERE assignmentId = '$assignmentId'
+";
 
 
 $result = $conn->query($sql);
@@ -72,4 +74,3 @@ if ($result === TRUE) {
 $conn->close();
 
 ?>
-

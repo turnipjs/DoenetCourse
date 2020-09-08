@@ -9,21 +9,17 @@ include "db_connection.php";
 
 $branchId = mysqli_real_escape_string($conn,$_REQUEST["branchId"]);
 $keyword = mysqli_real_escape_string($conn,$_REQUEST["keyword"]);
-//echo "keyword";
-//echo $keyword;
-//echo $contentId;
-$sql = "DELETE FROM keyword WHERE branchId='$branchId' AND keyword='$keyword'";
+$sql = "DELETE FROM keyword 
+        WHERE branchId='$branchId'
+        AND keyword='$keyword'";
 
 if ($conn->query($sql) === TRUE) {
     // set response code - 200 OK
     http_response_code(200);
-}else {
+} else {
     echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
+}
 
 $conn->close();
 
-
 ?>
-
