@@ -24,7 +24,7 @@ $sql = "SELECT   -- get all repos user has access to
         WHERE ra.userId='$userId'
           AND ra.removedFlag=0
           AND f.isPinned='0'
-        ORDER BY isPinned DESC
+        ORDER BY title ASC
 ";
 
 if (!$userId) {
@@ -42,7 +42,7 @@ if (!$userId) {
     ";
 }
 
-$result = $conn->query($sql); 
+$result = $conn->query($sql);
 
 $response_arr = array();
 $repo_info_arr = array();
@@ -51,7 +51,7 @@ $all_repo_array = array();
 $repos_arr = array();
 
 if ($result->num_rows > 0){
-    while($row = $result->fetch_assoc()){ 
+    while($row = $result->fetch_assoc()){
         if ($row["parentId"] == "root") array_push($repo_array, $row["folderId"]);
         if ($row["isRepo"] == 1) array_push($repos_arr,$row["folderId"]);
         array_push($all_repo_array, $row["folderId"]);
@@ -66,14 +66,14 @@ if ($result->num_rows > 0){
             "childFolders" => array(),
             "isRepo" => ($row["isRepo"] == 1),
             "isPublic" => ($row["isPublic"] == 1),
-            "isPinned" => ($row["isPinned"] == 1), 
+            "isPinned" => ($row["isPinned"] == 1),
             "numChild" => 0
         );
     }
 }
 
 // get children content and folders
-$sql = "SELECT 
+$sql = "SELECT
             fc.folderId as folderId,
             fc.rootId as rootId,
             fc.childId as childId,
@@ -109,7 +109,7 @@ if ($result->num_rows > 0){
 
 //Collect users who can access repos
 foreach ($repos_arr as $repoId) {
-    $sql = "SELECT 
+    $sql = "SELECT
                 u.firstName AS firstName,
                 u.lastName AS lastName,
                 u.username AS username,
@@ -120,7 +120,7 @@ foreach ($repos_arr as $repoId) {
             ON u.email = ra.email
             WHERE ra.repoId = '$repoId'
     ";
-    $result = $conn->query($sql); 
+    $result = $conn->query($sql);
     $users = array();
     while($row = $result->fetch_assoc()){
         $user_info = array(

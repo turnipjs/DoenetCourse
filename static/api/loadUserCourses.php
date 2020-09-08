@@ -132,6 +132,8 @@ if ($result->num_rows > 0){
 }
 
 
+
+
 $sql = "SELECT udm.courseId, udm.color, udm.position, udm.image
         FROM user_dashboard_modification as udm
         WHERE udm.userId = '$userId'

@@ -14,30 +14,37 @@ $jwtArray = include "jwtArray.php";
 $userId = $jwtArray['userId'];
 
 
-$sql = "SELECT id
-        FROM repo_access
-        WHERE userId = '$userId' AND repoId = '$repoId'
+$sql = "
+SELECT id
+FROM repo_access
+WHERE userId = '$userId' AND repoId = '$repoId' AND owner = '1'
 ";
 
-$result = $conn->query($sql); 
-$permisionToRemove = $result->num_rows;
-$userId = $result->userId; // ?
+$result = $conn->query($sql);
+$hasPermissionToRemove = $result->num_rows > 0;
+$userId = $result->userId;
 $row = $result->fetch_assoc();
 $userId = $row["userId"];
 
+if (!$hasPermissionToRemove) {
+  $response_message = "Must be owner to remove access";
+}
+
 $response_arr = array(
   "success"=>"0",
+  "message"=>$response_message
 );
 
-if ($permisionToRemove > 0 ){
-    //  User has permission to remove the user, so remove them
-    $sql = "DELETE FROM repo_access
-            WHERE repoId='$repoId' AND email='$email'
-    ";
-    $result = $conn->query($sql); 
+if ($hasPermissionToRemove ){
+//  User has permission to remove the user, so remove them
+  $sql = "
+  DELETE FROM repo_access
+  WHERE repoId='$repoId' AND email='$email'
+  ";
+  $result = $conn->query($sql);
 
     //Collect users who can access repos
-    $sql = "SELECT 
+    $sql = "SELECT
                 u.firstName AS firstName,
                 u.lastName AS lastName,
                 u.userId AS userId,
@@ -49,9 +56,9 @@ if ($permisionToRemove > 0 ){
             ON u.email = ra.email
             WHERE ra.repoId = '$repoId'
     ";
-    $result = $conn->query($sql); 
+    $result = $conn->query($sql);
     $users = array();
-    while($row = $result->fetch_assoc()){ 
+    while($row = $result->fetch_assoc()){
         $user_info = array(
             "firstName"=>$row["firstName"],
             "lastName"=>$row["lastName"],
@@ -65,7 +72,7 @@ if ($permisionToRemove > 0 ){
         "success"=>"1",
         "users"=>$users
     );
-} 
+}
 
 
 http_response_code(200);

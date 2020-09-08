@@ -14,11 +14,12 @@ export default class BaseComponent {
     coreFunctions,
     flags,
     shadow,
-    numerics, sharedParameters,
+    numerics, parentSharedParameters, sharedParameters,
     allowSugarForChildren,
   }) {
 
     this.numerics = numerics;
+    this.parentSharedParameters = parentSharedParameters;
     this.sharedParameters = sharedParameters;
 
     this.componentName = componentName;
@@ -219,6 +220,7 @@ export default class BaseComponent {
       "returnArraySizeDependencies", "returnArraySize",
       "returnArrayDependenciesByKey", "arrayDefinitionByKey",
       "inverseArrayDefinitionByKey",
+      "basedOnArrayKeyStateVariables", "entireArrayAtOnce",
       "markStale", "getPreviousDependencyValuesForMarkStale",
       "triggerParentChildLogicWhenResolved",
     ];

@@ -25,6 +25,22 @@ if (!isset($_REQUEST["assignmentId"])) {
     $assignmentId = mysqli_real_escape_string($conn, $_REQUEST["assignmentId"]);
     $attemptNumber = mysqli_real_escape_string($conn, $_REQUEST["attemptNumber"]);
     $userId = mysqli_real_escape_string($conn, $_REQUEST["userId"]);
+    $attemptTaken = false;
+
+    $sql = "SELECT *
+    FROM user_assignment_attempt AS uaa
+    WHERE uaa.userId = '$userId'
+    AND uaa.assignmentId = '$assignmentId'
+    AND uaa.attemptNumber = '$attemptNumber'
+    ";
+
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0){
+        $attemptTaken = true;
+    }
+
+
 
     $sql = "SELECT
                 ua.credit as assignmentCredit,
@@ -39,11 +55,11 @@ if (!isset($_REQUEST["assignmentId"])) {
 
             LEFT JOIN content AS c
             ON c.contentId = ci.contentId
-            
+
             LEFT JOIN user_assignment AS ua
             ON ua.assignmentId = '$assignmentId'
                 AND ua.userId = '$userId'
-            
+
             LEFT JOIN user_assignment_attempt AS uaa
             ON uaa.attemptNumber = '$attemptNumber'
                 AND uaa.assignmentId = '$assignmentId'
@@ -53,13 +69,13 @@ if (!isset($_REQUEST["assignmentId"])) {
                 AND ci.userId = '$userId'
     ";
 
-    $result = $conn->query($sql); 
+    $result = $conn->query($sql);
     $response_arr = array();
-
 
     if ($result->num_rows == 1){
         $row = $result->fetch_assoc();
         $response_arr = array(
+            "assignmentAttempted" => $attemptTaken,
             "doenetML"=>$row['doenetML'],
             "stateVariables"=>$row['stateVariables'],
             "variant"=>$row['variant'],
@@ -75,10 +91,45 @@ if (!isset($_REQUEST["assignmentId"])) {
 
         // make it json format
         echo json_encode($response_arr);
-        
+
     } else if ($result->num_rows == 0) {
-        http_response_code(404);
-        echo "Not Found: No attempt with the assignmentId: '$assignmentId', userId: '$userId', and attemptNumber: '$attemptNumber'!";
+        $sql = "SELECT
+                    c.doenetML,
+                    ua.creditOverride
+                FROM user_assignment AS ua
+                LEFT JOIN assignment AS a
+                ON a.assignmentId = '$assignmentId'
+                LEFT JOIN content AS c
+                ON a.contentId = c.contentId
+                WHERE ua.userId = '$userId'
+                AND ua.assignmentId = '$assignmentId';
+        ";
+
+        $result = $conn->query($sql);
+        if ($result->num_rows == 0) {
+            echo "no rows";
+        } else {
+            $row = $result->fetch_assoc();
+
+            $response_arr = array(
+                "assignmentAttempted" => $attemptTaken,
+                "doenetML"=>$row['doenetML'],
+                "stateVariables"=> array(),
+                "variant"=>array(),
+                "assignmentCredit"=>0,
+                "assignmentCreditOverride"=>$row['assignmentCreditOverride'],
+                "attemptCredit"=>0,
+                "attemptCreditOverride"=>0,
+                "timestamp"=> NULL,
+            );
+
+            // set response code - 200 OK
+            http_response_code(200);
+
+            // make it json format
+            echo json_encode($response_arr);
+        }
+
     } else {
         http_response_code(500);
         echo "Database Retrieval Error: Too Many Attempts Returned!";

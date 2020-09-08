@@ -7,27 +7,41 @@ header('Content-Type: application/json');
 
 include "db_connection.php";
 
+$jwtArray = include "jwtArray.php";
+$userId = $jwtArray['userId'];
+
 if (!isset($_GET["courseId"])) {
     http_response_code(400);
     echo "Database Retrieval Error: No course specified!";
 } else {
     $courseId = mysqli_real_escape_string($conn,$_REQUEST["courseId"]);
 
-    $sql = "SELECT a.assignmentId, a.title
-            FROM assignment AS a
-            WHERE a.courseId = '$courseId'
-            ORDER BY a.dueDate
+    $sql = "
+    SELECT a.assignmentId AS assignmentId,
+    a.title AS title,
+    a.totalPointsOrPercent AS totalPointsOrPercent,
+    ua.credit AS credit,
+    ua.creditOverride AS creditOverride
+    FROM assignment AS a
+    LEFT JOIN user_assignment as ua
+    ON ua.assignmentId = a.assignmentId
+    WHERE a.courseId = '$courseId'
+    AND ua.userId= '$userId'
+    ORDER BY a.dueDate
     ";
 
-    $result = $conn->query($sql); 
+    $result = $conn->query($sql);
     $response_arr = array();
 
     if ($result->num_rows > 0){
         while ($row = $result->fetch_assoc()) {
             array_push($response_arr,
                 array(
-                    $row['assignmentId'],
-                    $row['title']
+                    "assignmentId"=>$row['assignmentId'],
+                    "title"=>$row['title'],
+                    "totalPointsOrPercent"=>$row['totalPointsOrPercent'],
+                    "credit"=>$row['credit'],
+                    "creditOverride"=>$row['creditOverride']
                 )
             );
         }
