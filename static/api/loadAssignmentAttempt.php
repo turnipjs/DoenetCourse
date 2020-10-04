@@ -10,8 +10,6 @@ include "db_connection.php";
 $jwtArray = include "jwtArray.php";
 $instructorUserId = $jwtArray['userId'];
 
-//TODO: Check if $userId is an Instructor who has access
-
 if (!isset($_REQUEST["assignmentId"])) {
     http_response_code(400);
     echo "Bad Request: No assignmentId specified!";
@@ -26,6 +24,22 @@ if (!isset($_REQUEST["assignmentId"])) {
     $attemptNumber = mysqli_real_escape_string($conn, $_REQUEST["attemptNumber"]);
     $userId = mysqli_real_escape_string($conn, $_REQUEST["userId"]);
     $attemptTaken = false;
+
+
+
+    // test for access
+    $sql = "SELECT ci.userId, ci.courseId
+            FROM course_instructor AS ci, assignment AS a
+            WHERE ci.userId = '$userId'
+              AND ci.courseId = a.courseId
+              AND a.assignmentId = '$assignmentId'
+    ";
+    $result = $conn->query($sql);
+    if ($result->num_rows < 1) {
+        http_response_code(401);
+        echo "unauthorized";
+        return;
+    }
 
     $sql = "SELECT *
     FROM user_assignment_attempt AS uaa

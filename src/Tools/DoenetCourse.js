@@ -2,7 +2,6 @@
 // import axios from 'axios';
 // import './course.css';
 // import nanoid from 'nanoid';
-// import query from '../queryParamFuncs';
 // import DoenetBox from '../Tools/DoenetBox';
 // import DoenetAssignmentTree from "./DoenetAssignmentTree"
 import DoenetEditor from './DoenetEditor';

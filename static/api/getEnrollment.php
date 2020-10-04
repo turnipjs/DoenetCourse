@@ -12,6 +12,20 @@ $userId = $jwtArray['userId'];
 
 $courseId = mysqli_real_escape_string($conn,$_REQUEST["courseId"]);
 
+// check if user has permission to get this data
+$sql = "SELECT userId, courseId
+        FROM course_instructor
+        WHERE userId = '$userId'
+            AND courseId = '$courseId'
+";
+
+$result = $conn->query($sql);
+if ($userId != "4VYp5dOrVWGz0OKB2hkLW" && $result->num_rows < 1) { // hardcoded userid is devuser
+    http_response_code(401);
+    echo "Unauthorized: You are not an instructor for that course!";
+    $conn->close();
+    return;
+}
 
 $sql = "SELECT userId,
             firstName,

@@ -1,5 +1,4 @@
 // import nanoid from 'nanoid';
-// import query from '../queryParamFuncs';
 // import DoenetAssignmentTree from "./DoenetAssignmentTree"
 // import { TreeView } from './TreeView/TreeView';
 // import styled from "styled-components";

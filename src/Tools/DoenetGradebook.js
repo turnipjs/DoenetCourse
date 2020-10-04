@@ -12,7 +12,6 @@ import {
     useLocation,
     useHistory
 } from "react-router-dom";
-import query from '../queryParamFuncs';
 import DoenetViewer from "./DoenetViewer";
 
 import "../imports/table.css";

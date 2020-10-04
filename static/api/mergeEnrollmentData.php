@@ -13,6 +13,21 @@ $userId = $jwtArray['userId'];
 $_POST = json_decode(file_get_contents("php://input"),true);
 $courseId = mysqli_real_escape_string($conn,$_POST["courseId"]);
 
+// make sure userId has access
+$sql = "SELECT userId, courseId
+        FROM course_instructor
+        WHERE userId = '$userId'
+          AND courseId = '$courseId'
+";
+
+$result = $conn->query($sql);
+if ($userId != "4VYp5dOrVWGz0OKB2hkLW" && $result->num_rows < 1) { // hardcoded userid is devuser
+    http_response_code(401);
+    echo "Unauthorized: You are not an instructor for that course!";
+    $conn->close();
+    return;
+}
+
 $mergeHeads = array_map(
     function($branchId) use($conn) {
         return mysqli_real_escape_string($conn, $branchId);
