@@ -7,11 +7,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN docker-php-ext-install mysqli
 
 # Use Composer to install PHP-JWT Firebase
-RUN  apt-get update -y && \
-     apt-get upgrade -y && \
-     apt-get dist-upgrade -y && \
-     apt-get -y autoremove && \
-     apt-get clean
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get dist-upgrade -y && \
+    apt-get -y autoremove && \
+    apt-get clean
 RUN apt-get install -y p7zip \
     p7zip-full \
     unace \
@@ -35,6 +35,15 @@ COPY composer.json /composer.json
 RUN cd / && composer install
 
 RUN composer require firebase/php-jwt
+
+
+# install kafka extension
+RUN apt-get update -y && apt-get install -y librdkafka-dev && \
+    pecl install rdkafka-4.1.0 && \
+    docker-php-ext-enable rdkafka
+
+RUN echo "extension=rdkafka.so" >> /usr/local/etc/php.ini
+
 
 # Link /usr/local/apache2/htdocs/api/vendor to /vendor in dev environment for compatability with prod
 RUN ln -s /vendor ./vendor

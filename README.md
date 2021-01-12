@@ -205,5 +205,10 @@ We have not tested the current configuration with Nginx, you are on your own if 
 
 You must use port 3000 for Apache/Nginx or our PHP probably won't work on your stack.
 
+### Console consumer for Kafka
+open a terminal in the kafka container, then run these commands:  
+`$ cd /opt/bitnami/kafka/bin`  
+`$ kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic chat`
+
 ## Use Postman for API Testing
 User-authentication for DoenetTools is based on a JWT that is static when controlled for certain factors that are controlled in the dev environment. In order to test the API with postman, you can import the collection with a request already containing this pre-generated JWT cookie. The collection is located at `DoenetToolsDev.postman_collection.json`.

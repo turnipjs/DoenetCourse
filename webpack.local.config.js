@@ -35,7 +35,8 @@ module.exports = {
     "test/index.js": "./src/test/index.js",
     "viewer/index.js": "./src/viewer/index.js",
     "exampletool/index.js": "./src/exampletool/index.js",
-    "temp/index.js": "./src/temp/index.js"
+    "temp/index.js": "./src/temp/index.js",
+    "chatTest/index.js": "./src/chatTest/index.js"
     
   },
 
@@ -242,6 +243,12 @@ module.exports = {
       chunks: ["exampletool/index.js"],
       template: "./src/exampletool/index.html",
       filename: "./exampletool/index.html",
+      favicon: "./src/Tools/favicon.ico",
+    }),
+    new HtmlWebPackPlugin({
+      chunks: ["chatTest/index.js"],
+      template: "./src/chatTest/index.html",
+      filename: "./chatTest/index.html",
       favicon: "./src/Tools/favicon.ico",
     }),
     
