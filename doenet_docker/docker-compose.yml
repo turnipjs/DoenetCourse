@@ -68,6 +68,8 @@ services:
     command: 'npm run realtime'
     ports:
       - '81:81'
+    depends_on:
+      - kafka
 
 
 volumes:
