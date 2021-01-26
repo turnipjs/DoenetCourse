@@ -35,9 +35,8 @@ services:
     working_dir: /home/node/app
     volumes:
       - ..:/home/node/app
-    command: 'npm run webpack' # comment this line if you want to serve but not build
-    restart: always # comment this line if you want to serve but not build
-    # command: 'npm --version' # UNcomment this line if you want to serve but not build
+    command: 'npm run webpack'
+    restart: always
 
   zookeeper:
     image: 'docker.io/bitnami/zookeeper:3-debian-10'
@@ -59,6 +58,17 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+
+  rtnode:
+    image: node:13.8
+    user: 'node'
+    working_dir: /home/node/app
+    volumes:
+      - ..:/home/node/app
+    command: 'npm run realtime'
+    ports:
+      - '81:81'
+
 
 volumes:
   zookeeper_data:

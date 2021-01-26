@@ -7,8 +7,8 @@ $selectedPartition = $_REQUEST["partition"];
 $message = $_REQUEST["message"];
 
 $conf = new RdKafka\Conf();
-$conf->set('log_level', (string) LOG_DEBUG);
-$conf->set('debug', 'all');
+// $conf->set('log_level', (string) LOG_DEBUG);
+// $conf->set('debug', 'all');
 $rk = new RdKafka\Producer($conf);
 $rk->addBrokers("kafka:9092"); // Hopefully by the time this code is actually used, prod will be in Docker as well
 
