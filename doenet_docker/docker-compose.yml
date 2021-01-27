@@ -11,13 +11,13 @@ services:
     depends_on:
       - php
       - mysql
-    restart: always
+    # restart: always
 
   php:
     build: './php'
     volumes:
       - ../dist_local:/usr/local/apache2/htdocs
-    restart: always
+    # restart: always
 
   mysql:
     build: './mysql'
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./volumes/db:/var/lib/mysql
       - ./volumes/db_init:/docker-entrypoint-initdb.d
-    restart: always
+    # restart: always
 
   node:
     build: './node'
@@ -36,7 +36,7 @@ services:
     volumes:
       - ..:/home/node/app
     command: 'npm run webpack'
-    restart: always
+    # restart: always
 
   zookeeper:
     image: 'docker.io/bitnami/zookeeper:3-debian-10'
