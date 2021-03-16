@@ -3,4 +3,7 @@ import ReactDOM from 'react-dom';
 
 import DoenetChat from "../Tools/DoenetChat";
 
-ReactDOM.render(<DoenetChat />, document.getElementById('root'));
+ReactDOM.render(
+    <DoenetChat />,
+    document.getElementById("root")
+);

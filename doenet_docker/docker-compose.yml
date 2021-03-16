@@ -60,7 +60,7 @@ services:
       - zookeeper
 
   rtnode:
-    image: node:13.8
+    image: node:lts-alpine3.13
     user: 'node'
     working_dir: /home/node/app
     volumes:
